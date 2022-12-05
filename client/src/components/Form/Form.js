@@ -18,12 +18,12 @@ const Form = () => {
     }
 
     const clear = () => {
-        
+
     }
 
     return (
         <Paper className={styles.paper}>
-            <form autoComplete="off" noValidate className={styles.form} onSubmit={handleSubmit}>
+            <form autoComplete="off" noValidate className={`${styles.root} ${styles.form}`} onSubmit={handleSubmit}>
                 <Typography variant="h6">Creating a memory</Typography>
                 <TextField 
                 name="creator" 
