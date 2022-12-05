@@ -1,12 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useStyles from './styles';
 import { TextField, Button, Typography, Paper} from '@material-ui/core';
 import FileBase from 'react-file-base64';
-import { useDispatch } from 'react-redux';
-import { createPost } from '../../actions/posts'
+import { useDispatch, useSelector } from 'react-redux';
+import { createPost, updatePost } from '../../actions/posts'
+// Get current ID
 
-const Form = () => {
+const Form = ({ currentId, setCurrentId}) => {
     const styles = useStyles();
+
+    const post = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId) : null);
+
+    useEffect(() => {
+        if(post) setPostData(post);
+    }, [post])
 
     const [postData, setPostData] = useState({
         creator: '',
@@ -20,17 +27,24 @@ const Form = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(createPost(postData));
+
+        if(currentId) {
+            dispatch(updatePost(currentId, postData));
+        } else {
+            dispatch(createPost(postData));
+        }
+        clear();
     }
 
     const clear = () => {
-
+        setCurrentId(null);
+        setPostData({ creator: '', title: '', message: '', tags: '', selectedFile: '' });
     }
 
     return (
         <Paper className={styles.paper}>
             <form autoComplete="off" noValidate className={`${styles.root} ${styles.form}`} onSubmit={handleSubmit}>
-                <Typography variant="h6">Creating a memory</Typography>
+                <Typography variant="h6">{currentId ? 'Editing' : 'Creating'} a memory</Typography>
                 <TextField 
                 name="creator" 
                 variant="outlined" label="Creator" fullWidth 
