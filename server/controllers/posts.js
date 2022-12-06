@@ -33,7 +33,7 @@ export const updatePost = async (req, res) => {
 
     const updatedPost = await PostMessage.findByIdAndUpdate(_id, {...post, _id}, { new: true});
 
-    res.json(updatePost);
+    res.json(updatedPost);
 }
 
 export const deletePost = async (req, res) => {
@@ -54,5 +54,5 @@ export const likePost = async (req, res) => {
     const post = await PostMessage.findById(id);
     const updatedPost = await PostMessage.findByIdAndUpdate(id, { likeCount: post.likeCount + 1 }, { new: true});
     
-    res.json({message: 'Updated Post'});
+    res.json(updatedPost);
 }
